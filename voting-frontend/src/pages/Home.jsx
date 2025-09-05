@@ -25,11 +25,10 @@ const Home = () => {
       title: "Fast & Reliable",
       description: "Lightning fast system ensuring smooth voting experience.",
       icon: faBolt
-    }
+    },
   ]
 
   return (
-
     
     <div className="relative w-full min-h-screen bg-gray-50">
       {/* Hero Image */}
@@ -57,25 +56,12 @@ const Home = () => {
               key={i} 
               className="flex shadow-lg p-6 rounded-xl flex-col items-center gap-4 bg-white hover:shadow-xl transition-all"
             >
-              <img src={f.icon} alt={f.title} className="w-16 h-16" />
+              <FontAwesomeIcon src={f.icon} alt={f.title} className="w-16 h-16" />
               <h2 className="text-xl font-semibold">{f.title}</h2>
               <p className="text-gray-600 text-center">{f.description}</p>
             </div>
           ))}
         </div>
-    <div className="p-8 flex flex-col items-center justify-center w-screen">
-      <h1 className="text-2xl font-bold">Voting App</h1>
-      <p>
-        <Link to="/vote" className="text-blue-600">Go to Vote</Link> • <Link to="/results" className="text-blue-600">Results</Link> • <Link to="/admin" className="text-blue-600">Admin</Link>
-      </p>
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {candidates.map(c => (
-          <div key={c._id} className="border p-4 rounded">
-            <h3 className="font-semibold">{c.name}</h3>
-            <p>{c.party}</p>
-            <p>Votes: {c.votes}</p>
-          </div>
-        ))}
       </div>
     </div>
   )
