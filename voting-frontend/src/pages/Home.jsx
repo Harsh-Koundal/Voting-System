@@ -8,7 +8,7 @@ export default function Home(){
     API.get("/candidates").then(r => setCandidates(r.data.data)).catch(()=>{});
   },[]);
   return (
-    <div className="p-8">
+    <div className="p-8 flex flex-col items-center justify-center w-screen">
       <h1 className="text-2xl font-bold">Voting App</h1>
       <p>
         <Link to="/vote" className="text-blue-600">Go to Vote</Link> • <Link to="/results" className="text-blue-600">Results</Link> • <Link to="/admin" className="text-blue-600">Admin</Link>
