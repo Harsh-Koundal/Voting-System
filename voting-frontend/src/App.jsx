@@ -5,14 +5,15 @@ import Register from "./pages/Register";
 import VotePage from "./pages/VotePage";
 import Admin from "./pages/Admin";
 import Results from "./pages/Results";
-import NavBar from './NavBar/NabBar';
+import NabBar from './NavBar/NabBar';
+
 import './App.css'
 
 function App() {
 
   return (
     <BrowserRouter>
-    <NavBar/>
+    <NabBar/>
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/register' element={<Register />} />
