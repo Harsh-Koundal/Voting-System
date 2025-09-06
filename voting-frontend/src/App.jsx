@@ -5,8 +5,9 @@ import Register from "./pages/Register";
 import VotePage from "./pages/VotePage";
 import Admin from "./pages/Admin";
 import Results from "./pages/Results";
-import NabBar from './NavBar/NabBar';
-
+import NabBar from './components/NabBar';
+import Footer from './components/Footer';
+import Profile from './pages/Profile';
 import './App.css'
 
 function App() {
@@ -21,7 +22,9 @@ function App() {
       <Route path ='/vote' element={<VotePage />} />
       <Route path='/results' element={<Results />} />
       <Route path='/admin' element={<Admin />} />
+      <Route path='/profile' element={<Profile />} />
      </Routes>
+      <Footer/>
     </BrowserRouter>
   )
 }
