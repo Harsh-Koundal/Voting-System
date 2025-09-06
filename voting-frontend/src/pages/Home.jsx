@@ -29,7 +29,7 @@ const Home = () => {
   ]
 
   return (
-    
+
     <div className="relative w-full min-h-screen bg-gray-50">
       {/* Hero Image */}
       <div className="h-[60vh] w-full relative">
@@ -41,7 +41,7 @@ const Home = () => {
           <p className="text-lg md:text-xl max-w-2xl drop-shadow-md">
             Vote securely in online elections powered by <span className="font-semibold text-blue-300">CodeRage Technologies</span>
           </p>
-          <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-all" onClick={() => window.location.href='/register'}>
+          <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-all" onClick={() => window.location.href = '/register'}>
             Get Started
           </button>
         </div>
@@ -52,16 +52,17 @@ const Home = () => {
         <h1 className="text-3xl font-bold text-center">Features</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mt-10">
           {features.map((f, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="flex shadow-lg p-6 rounded-xl flex-col items-center gap-4 bg-white hover:shadow-xl transition-all"
             >
-              <FontAwesomeIcon src={f.icon} alt={f.title} className="w-16 h-16" />
+              <FontAwesomeIcon icon={f.icon} className="text-4xl text-blue-600" />
               <h2 className="text-xl font-semibold">{f.title}</h2>
               <p className="text-gray-600 text-center">{f.description}</p>
             </div>
           ))}
         </div>
+
       </div>
     </div>
   )
