@@ -1,39 +1,64 @@
-import { useEffect, useState } from "react";
-import API from "../api";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faPeopleArrows, faCalendar, faTag } from '@fortawesome/free-solid-svg-icons';
 
-export default function VotePage(){
-  const [candidates, setCandidates] = useState([]);
-  const [selected, setSelected] = useState(null);
-  const nav = useNavigate();
+const VotePage = () => {
+  const [user] = React.useState('Harsh');
+  const [elections] = React.useState(null);
+  const [isOpen] = React.useState('Open');
+  const [description] = React.useState(
+    'Election for the college student body president position.'
+  );
 
-  useEffect(()=> {
-    API.get("/candidates").then(r => setCandidates(r.data.data)).catch(()=>{});
-  },[]);
-
-  const cast = async () => {
-    const token = localStorage.getItem("token");
-    if(!token){ nav("/login"); return; }
-    try{
-      await API.post("/vote", { candidateId: selected }, { headers: { Authorization: `Bearer ${token}` }});
-      alert("Vote cast successfully");
-      nav("/results");
-    }catch(err){ alert(err?.response?.data?.msg || "Error"); }
-  };
+  const info = [
+    { label: '5 Candidates', icon: faPeopleArrows },
+    { label: 'Dec 10, 2024 - Dec 15, 2024', icon: faCalendar },
+    { label: '1500 Votes Cast', icon: faTag },
+  ];
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Cast your vote</h2>
-      <div className="grid md:grid-cols-3 gap-4">
-        {candidates.map(c => (
-          <div key={c._id} className={`p-4 border rounded ${selected===c._id ? "border-blue-600":""}`}>
-            <h3 className="font-semibold">{c.name}</h3>
-            <p>{c.party}</p>
-            <button onClick={()=>setSelected(c._id)} className="mt-2 bg-gray-100 px-3 py-1 rounded">Select</button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 w-screen p-4">
+      <div className="p-6 bg-white rounded-lg shadow-md w-full max-w-2xl hover:shadow-lg transition-shadow">
+        <h1 className="text-3xl font-bold mb-4">Welcome, {user}</h1>
+        <p>Here are the current elections available for voting.</p>
+
+        {/* Election Header */}
+        <div className="mt-6 border pt-4 rounded-lg p-4 w-full flex flex-col gap-4">
+          <div className="flex justify-between w-full items-center">
+            <h1 className="text-xl font-semibold">
+              {elections || 'College President 2025'}
+            </h1>
+            <p className="flex items-center gap-2 bg-green-200 text-green-800 rounded-lg px-2 py-1 text-sm font-medium">
+              <FontAwesomeIcon icon={faClock} /> {isOpen}
+            </p>
           </div>
-        ))}
+
+          {/* Description */}
+          <p className="text-gray-600">{description}</p>
+
+          {/* Info Section */}
+          <div className="mt-4 flex flex-col">
+            {info.map((item, idx) => (
+              <div
+                key={idx}
+                className="flex items-center gap-2 p-3 "
+              >
+                <FontAwesomeIcon icon={item.icon} className="text-blue-500" />
+                <span className="text-sm font-medium">{item.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Vote Button */}
+          <div className="flex justify-center mt-6 px-10">
+            <button className="w-full py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-xl">
+              Vote
+            </button>
+          </div>
+        </div>
       </div>
-      <button onClick={cast} disabled={!selected} className="mt-6 bg-blue-600 text-white px-4 py-2 rounded">Vote</button>
     </div>
-  )
-}
+  );
+};
+
+export default VotePage;
