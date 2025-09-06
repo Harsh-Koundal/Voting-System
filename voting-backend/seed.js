@@ -22,19 +22,21 @@ const adminHash = await bcrypt.hash("adminpass", salt);
 const userHash = await bcrypt.hash("userpass", salt);
 
 // Seed users
+// Seed users
 const admin = await User.create({ 
   name: "Admin", 
   email: "admin@example.com", 
-  password: adminHash,   // ✅ use password field
+  password: adminHash,   // <-- must match schema
   role: "admin" 
 });
 
 const user = await User.create({ 
   name: "Voter", 
   email: "voter@example.com", 
-  password: userHash,   // ✅ use password field
+  password: userHash,   // <-- must match schema
   role: "user" 
 });
+
 
 // Seed candidates
 const candidates = await Candidate.insertMany([
