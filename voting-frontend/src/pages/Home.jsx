@@ -70,7 +70,7 @@ const Home = () => {
         <h1 className='font-bold text-3xl'>Ready to Get Started?</h1>
         <p className='text-gray-500 mt-5 '>Join thousands of organizations and institutions that trust our platform for their democratic processes.</p>
         <div className='flex gap-5 flex-wrap justify-center mt-5'>
-          <button className='bg-blue-600 text-white rounded-md p-2'>Create Account</button>
+          <a href="/login"><button className='bg-blue-600 text-white rounded-md p-2'>Create Account</button></a>
           <button className='bg-white rounded-md p-2'>View Sample Results</button>
         </div>
         </div>
