@@ -7,24 +7,24 @@ import { faLock, faChartLine, faGlobe, faBolt } from '@fortawesome/free-solid-sv
 const Home = () => {
   const features = [
     {
-      title: "Secure Voting",
-      description: "Your vote is encrypted and protected with top-level security.",
+      title: "Secure & Private",
+      description: "End-to-end encryption ensures your vote remains private and secure from any tampering.",
       icon: faLock
     },
     {
-      title: "Transparent Results",
-      description: "See real-time voting results with complete transparency.",
+      title: "Easy to Use",
+      description: "Intuitive interface designed for voters of all technical backgrounds and ages.",
+      icon: faBolt
+    },
+    {
+      title: "Real-time Results",
+      description: "View live election results and comprehensive analytics as votes are counted.",
       icon: faChartLine
     },
     {
-      title: "Accessible Anywhere",
-      description: "Vote from anywhere in the world using your device.",
+      title: "Transparent Process",
+      description: "Full audit trail and transparency features ensure election integrity and trust.",
       icon: faGlobe
-    },
-    {
-      title: "Fast & Reliable",
-      description: "Lightning fast system ensuring smooth voting experience.",
-      icon: faBolt
     },
   ]
 
@@ -47,14 +47,16 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="my-20 px-6 md:px-20 ">
-        <h1 className="text-3xl font-bold text-center">Features</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mt-10">
+      <div>
+        <div className='text-center mt-20 px-6 md:px-20'>
+        <h1 className='font-bold text-3xl'>Why Choose Our Voting System</h1>
+        <p className='text-gray-500 mt-5'>Built with modern technology and security best practices to ensure your democratic process is fair, transparent, and accessible.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-10 px-5">
           {features.map((f, i) => (
             <div
               key={i}
-              className="flex shadow-lg p-6 rounded-xl flex-col items-center gap-4 bg-white hover:shadow-xl transition-all"
+              className=" flex flex-col justify-center items-center"
             >
               <FontAwesomeIcon icon={f.icon} className="text-4xl text-blue-600" />
               <h2 className="text-xl font-semibold">{f.title}</h2>
@@ -62,9 +64,17 @@ const Home = () => {
             </div>
           ))}
         </div>
-
       </div>
-    </div>
+      <div className='bg-gray-200 flex flex-col justify-center items-center gap-6 py-5 mt-20'>
+        <div className='text-center px-6 md:px-20 mb-10'></div>
+        <h1 className='font-bold text-3xl'>Ready to Get Started?</h1>
+        <p className='text-gray-500 mt-5 '>Join thousands of organizations and institutions that trust our platform for their democratic processes.</p>
+        <div className='flex gap-5 flex-wrap justify-center mt-5'>
+          <button className='bg-blue-600 text-white rounded-md p-2'>Create Account</button>
+          <button className='bg-white rounded-md p-2'>View Sample Results</button>
+        </div>
+        </div>
+      </div>
   )
 }
 

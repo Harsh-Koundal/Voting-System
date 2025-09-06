@@ -11,10 +11,11 @@ const NavBar = () => {
     <nav className="flex justify-between items-center p-3 fixed top-0 w-full shadow bg-white z-50">
       {/* Logo */}
       <div className="flex gap-3 items-center">
-        <a href="/">
-          <img src={logo} alt="logo" className="w-16 rounded-full sm:w-12" />
+        <a href="/" className='flex
+        gap-3 items-center'>
+          <img src={logo} alt="logo" className="w-16 rounded-full sm:w-12" /><h1 className="text-2xl font-bold sm:text-lg">Voting System</h1>
         </a>
-        <h1 className="text-2xl font-bold sm:text-lg">Voting System</h1>
+        
       </div>
 
       {/* Hamburger Icon */}
@@ -38,7 +39,7 @@ const NavBar = () => {
         <li><a href="/">Home</a></li>
         <li><a href="/vote">Elections</a></li>
         <li><a href="/results">Results</a></li>
-        <li><a href="/">Profile</a></li>
+        <li><a href="/profile">Profile</a></li>
         {!isLogin && <li><a href="/login">Log in</a></li>}
       </ul>
     </nav>
