@@ -1,6 +1,6 @@
 # Node modules
-voting-backend/node_modules
-voting-frontend/node_modules
+voting-backend/node_modules/
+voting-frontend/node_modules/
 
 # Logs
 npm-debug.log*
