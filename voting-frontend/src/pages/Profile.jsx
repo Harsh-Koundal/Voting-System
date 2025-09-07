@@ -8,9 +8,10 @@ const Profile = () => {
   })
 
   return (
-    <div className="w-screen min-h-screen pt-20 flex flex-col justify-start items-center px-6">
+    <div className="w-screen min-h-screen pt-20 flex flex-col justify-start items-center px-6 bg-gray-200">
       
       {/* Header */}
+      <div className='w-9/12 flex flex-col justify-center items-center bg-white px-6 rounded-md shadow-md mt-12'>
       <div className="max-w-4xl w-full flex flex-col justify-start items-start">
         <h1 className="text-3xl font-bold mt-10">My Profile</h1>
         <p className="text-gray-600">
@@ -33,11 +34,11 @@ const Profile = () => {
       </div>
 
       {/* Voting History Section */}
-      <div className="max-w-4xl w-full mt-10">
+      <div className="max-w-4xl w-full m-10">
         <h2 className="text-2xl font-bold mb-4">Voting History</h2>
         <p className="text-gray-600">No voting history available yet.</p>
       </div>
-
+</div>
     </div>
   )
 }
