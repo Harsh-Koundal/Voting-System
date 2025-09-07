@@ -45,7 +45,61 @@ The system provides a secure and transparent platform where users can register, 
 - 🔑 JWT (Authentication)  
 - 🔒 bcrypt.js (Password hashing)  
 
-
+---
 
 ## 📂 Project Structure
+
+Voting-System/
+│── voting-frontend/        # React frontend
+│   ├── src/
+│   │   ├── components/     # Reusable components
+│   │   ├── pages/          # Pages (Login, Dashboard, Results, etc.)
+│   │   └── App.js          # App routes
+│
+│── voting-backend/         # Node.js backend
+│   ├── models/             # Mongoose models (User, Candidate, Election)
+│   ├── routes/             # API routes
+│   ├── controllers/        # Logic for each route
+│   └── server.js           # Backend entry point
+│
+└── README.md
+
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/Harsh-Koundal/Voting-System.git
+cd voting-system
+```
+
+---
+
+### 2️⃣ Backend Setup
+```bash
+cd voting-backend
+npm install
+```
+Create a .env file in voting-backend/
+```bash
+PORT=5000
+DB_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+```
+
+Run backend:
+```bash
+npm start
+```
+
+### 3️⃣ Frontend Setup
+```bash
+cd ../voting-frontend
+npm install
+npm start
+```
+
+
 
