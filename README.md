@@ -1,7 +1,7 @@
 # 🗳️ Voting System Web Application
 
-A full-stack **Voting System** built with **React, Node.js, Express, and MongoDB**.  
-The system provides a secure and transparent platform where users can register, log in, vote for candidates, and view real-time results.
+A full-stack **Voting System** built with **React (frontend)** and **Node.js + Express + MongoDB (backend)**.  
+This project allows users to participate in elections, view live results, and ensures secure and transparent vote management.
 
 ---
 
