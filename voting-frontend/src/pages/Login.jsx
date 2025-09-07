@@ -6,15 +6,16 @@ import logo from '../assets/logo.png'
 
 const Login = () => {
   const [email, setEmail] = React.useState('')
-  const [pass, setPass] = React.useState('')
+  const [password, setPassword] = React.useState('')
   const navigate = useNavigate()
   const handelLogin = async()=>{
     try{
-      const res = await axios.post('http://localhost:5000/api/auth/login',{email,pass})
+      const res = await axios.post('http://localhost:5000/api/auth/login',{email,password})
       const {token,user} =res.data;
       localStorage.setItem('token',token)
+      window.dispatchEvent(new Event("storage"));
       alert('Login Successful')
-      navigate('/Home')
+      navigate('/')
     }catch(err){
       alert(err.response.data.msg ||'Login Failed')
     }
@@ -34,7 +35,7 @@ const Login = () => {
         <label htmlFor="email"><b>Email</b></label>
         <input type="text" className='bg-slate-100 pl-3 h-12 rounded-xl ' onChange={e=>setEmail(e.target.value)} placeholder='Enter your email'/>
         <label htmlFor="pass"><b>Password</b></label>
-        <input type="text" className='bg-slate-100 pl-3 h-12 rounded-xl' onChange={e=>setPass(e.target.value)} placeholder='Enter your password'/>
+        <input type="password" className='bg-slate-100 pl-3 h-12 rounded-xl' onChange={e=>setPassword(e.target.value)} placeholder='Enter your password'/>
         <button className='bg-blue-600 text-white p-2 rounded-xl mt-5 hover:bg-blue-700 transition-all' onClick={handelLogin}>Login</button>
         </div>
       </div>

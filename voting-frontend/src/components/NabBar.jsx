@@ -2,10 +2,28 @@ import React from 'react'
 import logo from '../assets/logo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-
+import axios from 'axios';
+import { useEffect } from 'react';
 const NavBar = () => {
   const [isLogin, setIsLogin] = React.useState(false)
   const [menuOpen, setMenuOpen] = React.useState(false)
+
+useEffect(()=>{
+  const checkLogin=()=>{
+    const token = localStorage.getItem('token')
+    setIsLogin(!!token)
+  }
+  checkLogin();
+  window.addEventListener('storage',checkLogin);
+  return ()=>{
+    window.removeEventListener('storage',checkLogin)
+  }
+},[])
+const handelLogout =()=>{
+  localStorage.removeItem('token')
+  setIsLogin(false)
+  window.location.href = '/'
+}
 
   return (
     <nav className="flex justify-between items-center p-3 fixed top-0 w-full shadow bg-white z-50">
@@ -40,7 +58,12 @@ const NavBar = () => {
         <li><a href="/vote">Elections</a></li>
         <li><a href="/results">Results</a></li>
         <li><a href="/profile">Profile</a></li>
-        {!isLogin && <li><a href="/login">Log in</a></li>}
+        {!isLogin ?( <li><a href="/login">Log in</a></li>
+        ):(
+          <li>
+            <button onClick={handelLogout} className='text-red-600 font-semibold hover:underline'>Logout</button>
+          </li>
+        )}
       </ul>
     </nav>
   )
