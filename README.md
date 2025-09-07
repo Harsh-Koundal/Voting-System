@@ -48,7 +48,7 @@ The system provides a secure and transparent platform where users can register, 
 ---
 
 ## 📂 Project Structure
-
+```bash
 Voting-System/
 │── voting-frontend/        # React frontend
 │   ├── src/
@@ -63,6 +63,7 @@ Voting-System/
 │   └── server.js           # Backend entry point
 │
 └── README.md
+```
 
 
 ---
