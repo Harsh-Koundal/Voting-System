@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.js';
 import candidateRoutes from './routes/candidates.js';
 import voteRoutes from './routes/vote.js';
 import resultRoutes from './routes/results.js';
+import profileRoutes from './routes/profile.js';
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/candidates', candidateRoutes);
 app.use('/api/votes', voteRoutes);
 app.use('/api/results', resultRoutes);
+app.use("/api/profile",profileRoutes)
 
 app.get('/', (req, res) => res.send({ ok: true, message: "Voting API running" }));
 
