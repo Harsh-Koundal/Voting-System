@@ -6,48 +6,41 @@ const router = express.Router();
 
 // 📌 Get profile
 router.get("/:userId", async (req, res) => {
-    try {
-        const { userId } = req.params;
+  try {
+    const { userId } = req.params;
 
-        // Validate ObjectId
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            return res.status(400).json({ message: "Invalid userId format" });
-        }
-
-        const profile = await Profile.findOne({ userId });
-        if (!profile) return res.status(404).json({ message: "Profile not found" });
-
-        res.json(profile);
-    } catch (error) {
-        console.error("❌ GET profile error:", error);
-        res.status(500).json({ error: error.message });
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid userId format" });
     }
+
+    const profile = await Profile.findOne({ userId: new mongoose.Types.ObjectId(userId) });
+    if (!profile) return res.status(404).json({ message: "Profile not found" });
+
+    res.json(profile);
+  } catch (error) {
+    console.error("❌ GET profile error:", error);
+    res.status(500).json({ error: error.message });
+  }
 });
+
 
 // 📌 Create profile
 router.post("/", async (req, res) => {
-  try {
-    const { userId, name, email } = req.body;
+const existingProfile = await Profile.findOne({ userId });
+if (existingProfile) {
+  return res.status(400).json({ message: "Profile already exists" });
+}
 
-    if (!userId || !name || !email) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
-
-    const existingProfile = await Profile.findOne({ userId });
-    if (existingProfile) {
-      return res.status(400).json({ message: "Profile already exists" });
-    }
-
-    const profile = new Profile({ userId, name, email });
-    await profile.save();
-
-    res.status(201).json(profile);
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({ message: "Email already in use" });
-    }
-    res.status(400).json({ error: error.message });
+try {
+  const profile = await Profile.create({ userId, name, email });
+  res.status(201).json(profile);
+} catch (err) {
+  if (err.code === 11000) {
+    return res.status(400).json({ message: "Duplicate profile/email" });
   }
+  throw err;
+}
+
 });
 
 

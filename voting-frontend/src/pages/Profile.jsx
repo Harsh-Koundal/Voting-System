@@ -17,7 +17,7 @@ const Profile = () => {
       const res = await axios.get(
           `${import.meta.env.VITE_API_URL}/profile/${userId}`,
           {
-            headers: {
+             headers: {
               Authorization: `Bearer ${token}`, 
             }
           }
