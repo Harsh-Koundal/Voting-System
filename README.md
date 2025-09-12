@@ -59,7 +59,6 @@ Voting-System/
 │── voting-backend/         # Node.js backend
 │   ├── models/             # Mongoose models (User, Candidate, Election)
 │   ├── routes/             # API routes
-│   ├── controllers/        # Logic for each route
 │   └── server.js           # Backend entry point
 │
 └── README.md
