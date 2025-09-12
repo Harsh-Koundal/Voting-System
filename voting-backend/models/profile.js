@@ -7,6 +7,7 @@ const profileSchema = new mongoose.Schema({
     // voterId:{type:String,required:true,unique:true},
     // age:{type:Number,required:true},
     // address:{type:String},
+    role:{type:String,enum:['user','admin'], default:'user'},
     hasVoted:{type:Boolean,default:false},
 });
 
