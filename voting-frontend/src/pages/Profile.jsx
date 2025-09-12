@@ -1,11 +1,35 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 
 const Profile = () => {
   const [user, setUser] = React.useState({
-    name: 'Harsh Koundal',
-    email: 'harsh.koundal@example.com',
-    role: 'Voter'
+    name: '',
+    email: '',
+    role: ''
   })
+  const [votingData , setVotingData] = useState(null)
+
+ useEffect(()=>{
+  const fetchProfile = async()=>{
+    try{
+      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token")
+      const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/profile/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, 
+            }
+          }
+        )
+        setUser(res.data)
+    }catch(error){
+      console.error(error.response?.data || error.message)
+    }
+  }
+  fetchProfile()
+ },[])
+
 
   return (
     <div className="w-screen min-h-screen pt-20 flex flex-col justify-start items-center px-6 bg-gray-200">
@@ -36,7 +60,7 @@ const Profile = () => {
       {/* Voting History Section */}
       <div className="max-w-4xl w-full m-10">
         <h2 className="text-2xl font-bold mb-4">Voting History</h2>
-        <p className="text-gray-600">No voting history available yet.</p>
+        <p className="text-gray-600">{votingData || `No voting history available yet.`}</p>
       </div>
 </div>
     </div>

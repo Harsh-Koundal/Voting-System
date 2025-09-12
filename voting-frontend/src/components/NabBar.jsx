@@ -58,7 +58,7 @@ const handelLogout =()=>{
         <li><a href="/vote">Elections</a></li>
         <li><a href="/results">Results</a></li>
         <li><a href="/profile">Profile</a></li>
-        {!isLogin ?( <li><a href="/login">Log in</a></li>
+        {!isLogin ?( <li><a href="/login">Sign in</a></li>
         ):(
           <li>
             <button onClick={handelLogout} className='text-red-600 font-semibold hover:underline'>Logout</button>
