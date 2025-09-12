@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import logo from '../assets/logo.png';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Signup = () => {
   });
 
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,7 +25,8 @@ const Signup = () => {
         formData
       );
       console.log("data:", res.data);
-      setMessage(res.data.message);
+      alert(res.data.message);
+      navigate('/login')
     } catch (error) {
       setMessage(error.response?.data?.message || "Something went wrong");
     }

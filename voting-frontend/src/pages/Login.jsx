@@ -19,11 +19,18 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem('userId', user.id);
       window.dispatchEvent(new Event('storage'))
+      if (res.data.user.role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/user-dashboard");
+      }
+
       alert('Login Successful')
       console.log(res.data.user)
       navigate('/')
     } catch (err) {
-      alert(err.response?.data?.msg || 'Login Failed')
+      alert(err.response?.data?.message || 'Login Failed')
+
     }
   }
 
