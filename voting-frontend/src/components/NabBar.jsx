@@ -7,23 +7,26 @@ import { useEffect } from 'react';
 const NavBar = () => {
   const [isLogin, setIsLogin] = React.useState(false)
   const [menuOpen, setMenuOpen] = React.useState(false)
+  const user = JSON.parse(localStorage.getItem('user'))
+  const role = user.role
+  console.log(role)
 
-useEffect(()=>{
-  const checkLogin=()=>{
-    const token = localStorage.getItem('token')
-    setIsLogin(!!token)
+  useEffect(() => {
+    const checkLogin = () => {
+      const token = localStorage.getItem('token')
+      setIsLogin(!!token)
+    }
+    checkLogin();
+    window.addEventListener('storage', checkLogin);
+    return () => {
+      window.removeEventListener('storage', checkLogin)
+    }
+  }, [])
+  const handelLogout = () => {
+    localStorage.removeItem('token')
+    setIsLogin(false)
+    window.location.href = '/'
   }
-  checkLogin();
-  window.addEventListener('storage',checkLogin);
-  return ()=>{
-    window.removeEventListener('storage',checkLogin)
-  }
-},[])
-const handelLogout =()=>{
-  localStorage.removeItem('token')
-  setIsLogin(false)
-  window.location.href = '/'
-}
 
   return (
     <nav className="flex justify-between items-center p-3 fixed top-0 w-full shadow bg-white z-50">
@@ -33,7 +36,7 @@ const handelLogout =()=>{
         gap-3 items-center'>
           <img src={logo} alt="logo" className="w-16 rounded-full sm:w-12" /><h1 className="text-2xl font-bold sm:text-lg">Voting System</h1>
         </a>
-        
+
       </div>
 
       {/* Hamburger Icon */}
@@ -57,9 +60,14 @@ const handelLogout =()=>{
         <li><a href="/">Home</a></li>
         <li><a href="/vote">Elections</a></li>
         <li><a href="/results">Results</a></li>
-        <li><a href="/profile">Profile</a></li>
-        {!isLogin ?( <li><a href="/login">Sign in</a></li>
-        ):(
+        <li>
+          <a href={role !== "admin" ? "/profile" : "/admin-dashboard"}>
+            {role !== "admin" ? "Profile" : "Admin Dashboard"}
+          </a>
+        </li>
+
+        {!isLogin ? (<li><a href="/login">Sign in</a></li>
+        ) : (
           <li>
             <button onClick={handelLogout} className='text-red-600 font-semibold hover:underline'>Logout</button>
           </li>
