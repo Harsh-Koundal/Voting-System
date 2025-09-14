@@ -22,35 +22,36 @@ const adminHash = await bcrypt.hash("adminpass", salt);
 const userHash = await bcrypt.hash("userpass", salt);
 
 // Seed users
-// Seed users
 const admin = await User.create({ 
   name: "Admin", 
   email: "admin@example.com", 
-  password: adminHash,   // <-- must match schema
+  password: adminHash,   
   role: "admin" 
 });
 
 const user = await User.create({ 
   name: "Voter", 
   email: "voter@example.com", 
-  password: userHash,   // <-- must match schema
+  password: userHash,   
   role: "user" 
 });
 
+// 1️⃣ Create election first
+const election = await Election.create({ 
+  name: "College President 2025", 
+  isOpen: true
+});
 
-// Seed candidates
+// 2️⃣ Seed candidates with election._id
 const candidates = await Candidate.insertMany([
-  { name: "Alice Johnson", party: "Unity Party", bio: "Experienced leader" },
-  { name: "Bob Smith", party: "Progressive", bio: "Community organizer" },
-  { name: "Charlie Brown", party: "Independent", bio: "Student representative" }
+  { name: "Alice Johnson", party: "Unity Party", bio: "Experienced leader", election: election._id },
+  { name: "Bob Smith", party: "Progressive", bio: "Community organizer", election: election._id },
+  { name: "Charlie Brown", party: "Independent", bio: "Student representative", election: election._id }
 ]);
 
-// Seed election
-await Election.create({ 
-  name: "College President 2025", 
-  isOpen: true,
-  candidates: candidates.map(c => c._id) // link candidates if schema allows
-});
+// 3️⃣ Update election with candidates list
+election.candidates = candidates.map(c => c._id);
+await election.save();
 
 console.log("Seeded:", { admin: admin.email, user: user.email });
 process.exit(0);

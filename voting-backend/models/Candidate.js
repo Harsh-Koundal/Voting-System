@@ -10,9 +10,18 @@ const candidateSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  bio: {   
+    type: String,
+    default: "",
+  },
   votes: {
     type: Number,
     default: 0,
+  },
+  election: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Election", 
+    required: true,
   },
 });
 

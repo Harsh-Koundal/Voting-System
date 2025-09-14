@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-
+import electionRoutes from './routes/elections.js'
 import authRoutes from './routes/auth.js';
 import candidateRoutes from './routes/candidates.js';
 import voteRoutes from './routes/vote.js';
@@ -41,8 +41,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/candidates', candidateRoutes);
 app.use('/api/votes', voteRoutes);
 app.use('/api/results', resultRoutes);
+app.use("/api/elections",electionRoutes)
 app.use("/api/profile",profileRoutes)
 
 app.get('/', (req, res) => res.send({ ok: true, message: "Voting API running" }));
 
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`)); 
