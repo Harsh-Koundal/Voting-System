@@ -1,19 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faPeopleArrows, faCalendar, faTag } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 const VotePage = () => {
-  const [user] = React.useState('Harsh');
-  const [elections] = React.useState(null);
-  const [isOpen] = React.useState('Open');
-  const [description] = React.useState(
-    'Election for the college student body president position.'
-  );
+  const [user, setUser] = useState('User');
+  const [elections, setElections] = useState([]);
 
-  const info = [
-    { label: '5 Candidates', icon: faPeopleArrows },
-    { label: 'Dec 10, 2024 - Dec 15, 2024', icon: faCalendar },
-    { label: '1500 Votes Cast', icon: faTag },
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/elections`);
+        console.log(res.data)
+        setElections(res.data || []);
+        
+        const userData = JSON.parse(localStorage.getItem("user"));
+        if (userData?.name) setUser(userData.name);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const infoTemplate = (election) => [
+    { label: `${election.candidates.length} Candidates`, icon: faPeopleArrows },
+    { label: election.startsAt && election.endsAt ? `${new Date(election.startsAt).toLocaleDateString()} - ${new Date(election.endsAt).toLocaleDateString()}` : 'Dates not available', icon: faCalendar },
+    { label: `${election.votesCast || 0} Votes Cast`, icon: faTag },
   ];
 
   return (
@@ -22,39 +36,40 @@ const VotePage = () => {
         <h1 className="text-3xl font-bold mb-4">Welcome, {user}</h1>
         <p>Here are the current elections available for voting.</p>
 
-        {/* Election Header */}
-        <div className="mt-6 border pt-4 rounded-lg p-4 w-full flex flex-col gap-4">
-          <div className="flex justify-between w-full items-center">
-            <h1 className="text-xl font-semibold">
-              {elections || 'College President 2025'}
-            </h1>
-            <p className="flex items-center gap-2 bg-green-200 text-green-800 rounded-lg px-2 py-1 text-sm font-medium">
-              <FontAwesomeIcon icon={faClock} /> {isOpen}
-            </p>
-          </div>
+        {/* Render Elections */}
+        <div className="mt-6 flex flex-col gap-6">
+          {elections.length === 0 && <p>No elections available.</p>}
 
-          {/* Description */}
-          <p className="text-gray-600">{description}</p>
-
-          {/* Info Section */}
-          <div className="mt-4 flex flex-col">
-            {info.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-2 p-3 "
-              >
-                <FontAwesomeIcon icon={item.icon} className="text-blue-500" />
-                <span className="text-sm font-medium">{item.label}</span>
+          {elections.map((election) => (
+            <div key={election._id} className="border pt-4 rounded-lg p-4 w-full flex flex-col gap-4">
+              <div className="flex justify-between w-full items-center">
+                <h1 className="text-xl font-semibold">{election.name}</h1>
+                <p className={`flex items-center gap-2 px-2 py-1 text-sm font-medium rounded-lg ${election.isOpen ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
+                  <FontAwesomeIcon icon={faClock} /> {election.isOpen ? 'Open' : 'Closed'}
+                </p>
               </div>
-            ))}
-          </div>
 
-          {/* Vote Button */}
-          <div className="flex justify-center mt-6 px-10">
-            <button className="w-full py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-xl">
-              Vote
-            </button>
-          </div>
+              {/* Description */}
+              <p className="text-gray-600">{election.description || 'No description available.'}</p>
+
+              {/* Info Section */}
+              <div className="mt-4 flex flex-col">
+                {infoTemplate(election).map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-2 p-3">
+                    <FontAwesomeIcon icon={item.icon} className="text-blue-500" />
+                    <span className="text-sm font-medium">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Vote Button */}
+              <div className="flex justify-center mt-6 px-10">
+                <button className="w-full py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-xl">
+                  Vote
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
