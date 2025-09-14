@@ -38,8 +38,12 @@ const user = await User.create({
 
 // 1️⃣ Create election first
 const election = await Election.create({ 
-  name: "College President 2025", 
-  isOpen: true
+  name: "College President 2025",
+  description: "Election for the college student body president position.",
+  isOpen: true,
+  startsAt: new Date("2025-09-01T09:00:00Z"),
+  endsAt: new Date("2025-09-15T17:00:00Z"),
+  votesCast: 0
 });
 
 // 2️⃣ Seed candidates with election._id
