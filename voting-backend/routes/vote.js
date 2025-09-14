@@ -1,28 +1,36 @@
-import express from 'express';
-import { authMiddleware, adminOnly } from "../middleware/auth.js";
-import Election from "../models/Election.js";
-import Vote from '../models/Vote.js';
-import Candidate from '../models/Candidate.js';
+import express from "express"
+import Vote from "../models/Vote.js"
+import Election from "../models/Election.js"
+import Candidate from "../models/Candidate.js"
+import {authMiddleware} from "../middleware/auth.js"
+
 const router = express.Router();
 
-// Cast Vote
-router.post('/', authMiddleware, async (req, res) => {
-    const user =req.user;
-    const {candidateId} = req.body;
-    if(!candidateId) return res.status(400).json({msg:"Candidate ID is required"});
+//Post a Vote
+router.post("/:electionId/:candidateId",authMiddleware,async(req,res)=>{
+    try{
+        const {electionId,candidateId} = req.params;
+        const userId = req.user.id;
+        
+        //check if election exists
+        const election = await Election.findById(electionId);
+        if(!election) return res.status(400).json({message:"Election Not Found"});
 
-    const election = await Election.findOne();
-    if(!election || !election.isOpen) return res.status(400).json({msg:"Election is not open"});
+        //check if candidate belogn to this election
+        const candidate = await Candidate.findOne({_id:candidateId,election:electionId});
+        if(!candidate) return res.status(400).json({message:"Invalid Candidate"});
 
-    const existing = await Vote.findOne({voter:user._id});
-    if(existing) return res.status(400).json({msg:"You have already voted"});
+        // Vote
+        const vote = new Vote({user:userId,election:electionId,candidate:candidateId})
+        await vote.save();
 
-    const candidate = await Candidate.findById(candidateId);
-    if(!candidate) return res.status(400).json({msg:"Candidate not found"});
+        res.status(201).json({message:"Vote cast successfully!",vote});
+    }catch(error){
+        if(error.code === 11000){
+            return res.status(400).json({message:"You have already voted in this election"});
+        }
+        res.status(500).json({message:"server error ",error})
+    }
+})
 
-    const vote = new Vote({voter:user._id,candidate:candidateId});
-    await vote.save();
-    res.json({msg:"Vote cast successfully",data:{voteId:vote._id}});
-});
-
-export default router;
+export default router
