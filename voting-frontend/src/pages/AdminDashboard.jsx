@@ -9,6 +9,7 @@ const AdminDashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentId, setCurrentId] = useState(null);
+  const [user ,setUser] = useState([])
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -23,13 +24,26 @@ const AdminDashboard = () => {
       try {
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/elections`);
         setElections(res.data || []);
-        console.log(res.data);
+        // console.log(res.data);
       } catch (error) {
         console.error("error", error);
       }
     };
     fetchData();
   }, []);
+
+  useEffect(()=>{
+    const fetchData = async()=>{
+      try{
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+        setUser(res.data)
+        console.log("1",res.data)
+      }catch(error){
+        console.error("error:",error)
+      }
+    }
+    fetchData()
+  },[])
 
   const info = [
     { title: "Total Elections", icon: Calendar, total: elections.length },
@@ -119,14 +133,6 @@ const AdminDashboard = () => {
   const addCandidate = () => {
     setFormData({ ...formData, candidates: [...formData.candidates, ""] });
   };
-
-  const users = [
-    { id: 1, name: "John Doe", role: "admin" },
-    { id: 2, name: "Alice Johnson", role: "user" },
-    { id: 3, name: "Bob Smith", role: "user" },
-    { id: 4, name: "Charlie Brown", role: "user" },
-    { id: 5, name: "Diana Prince", role: "user" },
-  ];
 
   const renderContent = () => {
     switch (activeTab) {
@@ -338,7 +344,7 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user, i) => (
+                  {user.map((user, i) => (
                     <tr key={i} className="hover:bg-gray-50">
                       <td className="px-4 py-2 border-b">{user.name}</td>
                       <td className="border-b">
