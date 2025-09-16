@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '../assets/logo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
@@ -7,9 +7,14 @@ import { useEffect } from 'react';
 const NavBar = () => {
   const [isLogin, setIsLogin] = React.useState(false)
   const [menuOpen, setMenuOpen] = React.useState(false)
+  const [role , setRole] = useState('user')
   const user = JSON.parse(localStorage.getItem('user'))
-  const role = user.role
-  console.log(role)
+  useEffect(() => {
+    if (user) {
+      setRole(user.role)
+    }
+  }, [user]) 
+  // console.log(role)
 
   useEffect(() => {
     const checkLogin = () => {
@@ -24,6 +29,7 @@ const NavBar = () => {
   }, [])
   const handelLogout = () => {
     localStorage.removeItem('token')
+    localStorage.removeItem('user')
     setIsLogin(false)
     window.location.href = '/'
   }
