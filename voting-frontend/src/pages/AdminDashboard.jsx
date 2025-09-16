@@ -9,7 +9,7 @@ const AdminDashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentId, setCurrentId] = useState(null);
-  const [user ,setUser] = useState([])
+  const [user, setUser] = useState([])
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -18,6 +18,16 @@ const AdminDashboard = () => {
     startsAt: "",
     endsAt: "",
   });
+  const [editingUser, setEditingUser] = useState(null);
+  const [showUserForm, setShowUserForm] = useState(false);
+
+  const handelEditUser = (user) => {
+    setEditingUser(user);
+    setIsEditing(true);
+    setCurrentId(user._id);
+    setShowUserForm(true);
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,18 +42,18 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
 
-  useEffect(()=>{
-    const fetchData = async()=>{
-      try{
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
         setUser(res.data)
-        console.log("1",res.data)
-      }catch(error){
-        console.error("error:",error)
+        console.log("1", res.data)
+      } catch (error) {
+        console.error("error:", error)
       }
     }
     fetchData()
-  },[])
+  }, [])
 
   const info = [
     { title: "Total Elections", icon: Calendar, total: elections.length },
@@ -88,6 +98,15 @@ const AdminDashboard = () => {
       console.error(err);
     }
   };
+
+  const handleDeleteUser = async (id) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/users/${id}`);
+      setUser((prev) => prev.filter((e) => e._id !== id))
+    } catch (error) {
+      console.error("error", error)
+    }
+  }
 
   const handleEdit = (election) => {
     setFormData({
@@ -163,13 +182,12 @@ const AdminDashboard = () => {
                   </div>
                   <div className="flex items-center gap-3">
                     <span
-                      className={`px-3 py-1 rounded-full text-white font-medium text-sm ${
-                        items.status === "open"
+                      className={`px-3 py-1 rounded-full text-white font-medium text-sm ${items.status === "open"
                           ? "bg-green-400"
                           : items.status === "closed"
-                          ? "bg-red-500"
-                          : "bg-indigo-400"
-                      }`}
+                            ? "bg-red-500"
+                            : "bg-indigo-400"
+                        }`}
                     >
                       {items.status}
                     </span>
@@ -297,9 +315,8 @@ const AdminDashboard = () => {
                       <td className="px-4 py-2 border-b">{election.votesCast || 0}</td>
                       <td className="px-4 py-2 border-b">
                         <span
-                          className={`px-3 py-1 text-xs rounded-full text-white ${
-                            election.isOpen ? "bg-green-500" : "bg-red-500"
-                          }`}
+                          className={`px-3 py-1 text-xs rounded-full text-white ${election.isOpen ? "bg-green-500" : "bg-red-500"
+                            }`}
                         >
                           {election.isOpen ? "open" : "closed"}
                         </span>
@@ -335,6 +352,55 @@ const AdminDashboard = () => {
           <div>
             <h1>Manage Users</h1>
             <div className="overflow-x-auto">
+              {showUserForm && editingUser && (
+                <div className="mb-6 border p-4 rounded-lg bg-gray-50">
+                  <h2 className="text-lg font-semibold mb-3">Edit User</h2>
+
+                  <input
+                    type="text"
+                    name="name"
+                    value={editingUser.name}
+                    onChange={(e) =>
+                      setEditingUser({ ...editingUser, name: e.target.value })
+                    }
+                    className="w-full mb-3 p-2 border rounded"
+                  />
+
+                  <select
+                    name="role"
+                    value={editingUser.role}
+                    onChange={(e) =>
+                      setEditingUser({ ...editingUser, role: e.target.value })
+                    }
+                    className="w-full mb-3 p-2 border rounded"
+                  >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await axios.put(
+                          `${import.meta.env.VITE_API_URL}/users/${editingUser._id}`,
+                          editingUser
+                        );
+                        setUser((prev) =>
+                          prev.map((u) => (u._id === editingUser._id ? res.data : u))
+                        );
+                        setShowUserForm(false);
+                        setEditingUser(null);
+                      } catch (err) {
+                        console.error(err);
+                      }
+                    }}
+                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              )}
+
               <table className="min-w-full border border-gray-200 rounded-md">
                 <thead className="bg-gray-100">
                   <tr>
@@ -345,24 +411,23 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {user.map((user, i) => (
-                    <tr key={i} className="hover:bg-gray-50">
+                    <tr key={user._id} className="hover:bg-gray-50">
                       <td className="px-4 py-2 border-b">{user.name}</td>
                       <td className="border-b">
                         <span
-                          className={`px-3 py-1 rounded-full ${
-                            user.role === "admin"
+                          className={`px-3 py-1 rounded-full ${user.role === "admin"
                               ? "bg-blue-600 text-white"
                               : "bg-blue-100 text-blue-800"
-                          }`}
+                            }`}
                         >
                           {user.role}
                         </span>
                       </td>
                       <td className="px-4 py-2 border-b flex gap-2">
-                        <button className="px-3 py-1 bg-yellow-400 text-white rounded-md text-sm hover:bg-yellow-500">
+                        <button className="px-3 py-1 bg-yellow-400 text-white rounded-md text-sm hover:bg-yellow-500" onClick={() => handelEditUser(user)}>
                           Edit
                         </button>
-                        <button className="px-3 py-1 bg-red-500 text-white rounded-md text-sm hover:bg-red-600">
+                        <button className="px-3 py-1 bg-red-500 text-white rounded-md text-sm hover:bg-red-600" onClick={() => handleDeleteUser(user._id)}>
                           Delete
                         </button>
                       </td>
@@ -389,25 +454,22 @@ const AdminDashboard = () => {
         <div className="bg-gray-200 flex flex-wrap sm:flex-nowrap gap-3 p-3 px-5 rounded-lg shadow-md m-4 justify-center sm:justify-between items-center w-full">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm sm:text-base ${
-              activeTab === "overview" ? "bg-white shadow font-semibold" : ""
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm sm:text-base ${activeTab === "overview" ? "bg-white shadow font-semibold" : ""
+              }`}
           >
             <BarChart2 size={18} /> Overview
           </button>
           <button
             onClick={() => setActiveTab("elections")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm sm:text-base ${
-              activeTab === "elections" ? "bg-white shadow font-semibold" : ""
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm sm:text-base ${activeTab === "elections" ? "bg-white shadow font-semibold" : ""
+              }`}
           >
             <Calendar size={18} /> Elections
           </button>
           <button
             onClick={() => setActiveTab("users")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm sm:text-base ${
-              activeTab === "users" ? "bg-white shadow font-semibold" : ""
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm sm:text-base ${activeTab === "users" ? "bg-white shadow font-semibold" : ""
+              }`}
           >
             <Users size={18} /> Users
           </button>
