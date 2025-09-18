@@ -25,4 +25,15 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Delete election
+router.delete('/:id',async(req,res)=>{
+  try{
+    const election = await Election.findByIdAndDelete(req.params.id);
+    if(!election) return res.status(400).json({message:"election not found"});
+    res.json({message:"Election deleted successfully"})
+  }catch(error){
+    res.status(500).json({message:"Error deleting election"})
+  }
+})
+
 export default router;
