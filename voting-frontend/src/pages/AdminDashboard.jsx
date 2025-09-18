@@ -34,7 +34,7 @@ const AdminDashboard = () => {
       try {
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/elections`);
         setElections(res.data || []);
-        // console.log(res.data);
+        console.log(res.data);
       } catch (error) {
         console.error("error", error);
       }
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
   }));
 
 
-  const handleCreate = async () => {
+  const handleCreate = async (id) => {
     try {
       const payload = {
         ...formData,
@@ -80,8 +80,9 @@ const AdminDashboard = () => {
       delete payload.status;
 
       if (isEditing) {
-        const res = await axios.put(`${import.meta.env.VITE_API_URL}/elections/${currentId}`, payload);
-        setElections((prev) => prev.map((e) => (e._id === currentId ? res.data : e)));
+        const res = await axios.put(`${import.meta.env.VITE_API_URL}/elections/${id}`, payload);
+        console.log(res)
+        setElections((prev) => prev.map((e) => (e._id === id ? res.data : e)));
       } else {
         const res = await axios.post(`${import.meta.env.VITE_API_URL}/elections`, payload);
         setElections((prev) => [...prev, res.data]);
@@ -290,7 +291,7 @@ const AdminDashboard = () => {
                 </div>
 
                 <button
-                  onClick={handleCreate}
+                  onClick={()=>handleCreate(currentId)}
                   className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
                 >
                   {isEditing ? "Update" : "Create"}
