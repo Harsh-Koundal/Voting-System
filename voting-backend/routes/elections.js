@@ -6,7 +6,7 @@ const router = express.Router();
 // Get all elections
 router.get("/", async (req, res) => {
   try {
-    const elections = await Election.find().populate("candidates");
+    const elections = await Election.find();
     res.json(elections);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -16,8 +16,8 @@ router.get("/", async (req, res) => {
 // Create election
 router.post("/", async (req, res) => {
   try {
-    const { name, isOpen, startsAt, endsAt } = req.body;
-    const election = new Election({ name, isOpen, startsAt, endsAt });
+    const { name, isOpen, startsAt, endsAt,description ,candidates } = req.body;
+    const election = new Election({ name,description, isOpen, startsAt, endsAt,candidates });
     await election.save();
     res.status(201).json(election);
   } catch (error) {

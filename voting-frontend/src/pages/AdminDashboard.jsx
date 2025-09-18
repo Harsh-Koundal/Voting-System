@@ -69,12 +69,15 @@ const AdminDashboard = () => {
     period: `${new Date(election.startsAt).toLocaleDateString()} - ${new Date(election.endsAt).toLocaleDateString()}`,
   }));
 
+
   const handleCreate = async () => {
     try {
       const payload = {
         ...formData,
         candidates: formData.candidates.map((c) => c.trim()),
+        isOpen: formData.status === "open",
       };
+      delete payload.status;
 
       if (isEditing) {
         const res = await axios.put(`${import.meta.env.VITE_API_URL}/elections/${currentId}`, payload);
@@ -89,6 +92,7 @@ const AdminDashboard = () => {
       console.error(err);
     }
   };
+
 
   const handleDelete = async (id) => {
     try {
@@ -183,10 +187,10 @@ const AdminDashboard = () => {
                   <div className="flex items-center gap-3">
                     <span
                       className={`px-3 py-1 rounded-full text-white font-medium text-sm ${items.status === "open"
-                          ? "bg-green-400"
-                          : items.status === "closed"
-                            ? "bg-red-500"
-                            : "bg-indigo-400"
+                        ? "bg-green-400"
+                        : items.status === "closed"
+                          ? "bg-red-500"
+                          : "bg-indigo-400"
                         }`}
                     >
                       {items.status}
@@ -416,8 +420,8 @@ const AdminDashboard = () => {
                       <td className="border-b">
                         <span
                           className={`px-3 py-1 rounded-full ${user.role === "admin"
-                              ? "bg-blue-600 text-white"
-                              : "bg-blue-100 text-blue-800"
+                            ? "bg-blue-600 text-white"
+                            : "bg-blue-100 text-blue-800"
                             }`}
                         >
                           {user.role}
