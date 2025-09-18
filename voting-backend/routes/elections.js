@@ -36,4 +36,20 @@ router.delete('/:id',async(req,res)=>{
   }
 })
 
+//update election
+router.put('/:id',async(req,res)=>{
+  try{
+    const { name, isOpen, startsAt, endsAt,description ,candidates } = req.body;
+    const election = await Election.findByIdAndUpdate(
+      req.params.id,
+       { name, isOpen, startsAt, endsAt,description ,candidates },
+       {new:true}
+    );
+    if(!election) return res.status(404).json({message:"Election not found"});
+        res.json(election)
+  }catch(error){
+        res.status(400).json({ message: "Error updating election", error });
+    }
+})
+
 export default router;
